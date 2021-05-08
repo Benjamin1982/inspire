@@ -27,7 +27,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 
 public class MainSwing extends JFrame implements ActionListener {
-    private String airport = "." + "\\\\" + "circus" + ".dat";
+    private String airport = "." + "\\\\" + "filedata" + ".dat";
     JTextField tf1;
     JTextField tf2;
     JLabel feldName, feldNummer;
@@ -71,7 +71,7 @@ public class MainSwing extends JFrame implements ActionListener {
             public void windowClosing(WindowEvent vw) {
                 System.out.println("Wird beim Speichern aufgerufen");
                 try (var out = new BufferedWriter(new FileWriter(airport))) {
-                    System.out.println("Oeffne Datei circus.dat in src Ordner");
+                    System.out.println("Oeffne Datei filedata.dat in src Ordner");
                     int j = 0;
                     for (int i = 0; i < tableModel.getRowCount(); i++) {
                         j++;
