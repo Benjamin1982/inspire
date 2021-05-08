@@ -26,8 +26,9 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
 
+// Application running under Java version 11 ++
 public class MainSwing extends JFrame implements ActionListener {
-    private String airport = "." + "\\\\" + "filedata" + ".dat";
+    private String connectionstring = "." + "\\\\" + "filedata" + ".dat";
     JTextField tf1;
     JTextField tf2;
     JLabel feldName, feldNummer;
