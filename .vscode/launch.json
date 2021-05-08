@@ -12,9 +12,9 @@
         },
         {
             "type": "java",
-            "name": "Launch JavaUebungen",
+            "name": "Launch MainSwing",
             "request": "launch",
-            "mainClass": "JavaUebungen",
+            "mainClass": "MainSwing",
             "projectName": "Circus_b2fcc919"
         }
     ]

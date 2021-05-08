@@ -16,19 +16,23 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
 public class MainSwing extends JFrame implements ActionListener {
+    private String airport = "." + "\\\\" + "circus" + ".dat";
     JTextField tf1;
     JTextField tf2;
     JLabel feldName, feldNummer;
     String cols[] = new String[] { "ID", "Name", "Telefonnummer" };
-    String[][] rec = { { "1", "Steve", "0711-OnClassPath" }, { "2", "Virat", "0712-OnClassPath" },
-            { "3", "Kane", "0778-OnClassPath" }, { "4", "David", "252552" }, { "5", "Ben", "626116" },
-            { "6", "Eion", "080ß1423" },
-
-            { "1", "Steve", "0711-OnClassPath" }, { "2", "Virat", "0712-OnClassPath" },
-            { "3", "Kane", "0778-OnClassPath" }, { "4", "David", "252552" }, { "5", "Ben", "626116" },
-            { "6", "Eion", "080ß1423" }, };
+    String[][] rec = { {} };
 
     TableModel tableModel = new DefaultTableModel(rec, cols);
     JTable tableTankstelle = new JTable();
@@ -62,6 +66,71 @@ public class MainSwing extends JFrame implements ActionListener {
         Anlegen.setMargin(new Insets(5, 5, 5, 5));
         neu.add(Updaten);
         neu.add(Anlegen);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent vw) {
+                System.out.println("Wird beim Speichern aufgerufen");
+                try (var out = new BufferedWriter(new FileWriter(airport))) {
+                    System.out.println("Oeffne Datei circus.dat in src Ordner");
+                    int j = 0;
+                    for (int i = 0; i < tableModel.getRowCount(); i++) {
+                        j++;
+                        for (var X = 0; X < tableModel.getColumnCount(); X++)
+
+                        {
+                            if (tableModel.getValueAt(i, X) != null) {
+                                // zusammenpuzzeln
+                                out.write(tableModel.getValueAt(i, X).toString());
+                            } else
+                                out.write("");
+                            out.newLine();
+                        }
+                    }
+                    System.out.println("Try schleife wird beendet ");
+                    System.out.println("Row Count @= " + j);
+                } catch (Exception iuo) {
+                    {
+
+                    }
+                    iuo.printStackTrace();
+                }
+            }
+
+            @Override
+            public void windowOpened(WindowEvent vw) {
+                // same with opening of Swing Window
+                System.out.println("Wiederoeffnen des Fensters (Aktion?)");
+
+                var datei = new File(airport);
+                if (!datei.exists()) {
+                    System.out.println("Die Datei wurde gefunden");
+                    try {
+                        datei.createNewFile(); // OnDisk
+                    }
+
+                    catch (IOException a) {
+                        a.printStackTrace();
+                    }
+                    // Datei ist def. da
+
+                }
+
+                try (var in = new BufferedReader(new FileReader(airport))) {
+                    for (var i = 0; i < tableModel.getRowCount(); i++) {
+                        for (var j = 0; j < tableModel.getColumnCount(); j++) {
+                            var eintragspant = in.readLine();
+                            tableModel.setValueAt(eintragspant, i, j);
+                        }
+                    }
+                } catch (Exception b) {
+
+                    b.printStackTrace();
+                }
+
+            }
+
+        });
+
         Anlegen.addActionListener(new ActionListener()
 
         {
@@ -70,6 +139,12 @@ public class MainSwing extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
                 System.out.println("Fange Event");
+
+                int neuzeilen = tableTankstelle.getModel().getRowCount() + 1;
+                var model = (DefaultTableModel) tableTankstelle.getModel();
+                System.out.println(neuzeilen);
+                model.addRow(new String[] { String.valueOf(neuzeilen) });
+                neu.revalidate();
             }
         });
         Updaten.addActionListener(new ActionListener()
@@ -100,6 +175,12 @@ public class MainSwing extends JFrame implements ActionListener {
     public static void main(String[] args) {
 
         MainSwing obj = new MainSwing();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+
     }
 
 }
